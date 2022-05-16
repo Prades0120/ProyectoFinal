@@ -1,4 +1,4 @@
-package org.ieselcaminas.proyectofinall.ui
+package org.ieselcaminas.proyectofinal.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import org.ieselcaminas.proyectofinall.R
-import org.ieselcaminas.proyectofinall.databinding.FragmentAccountBinding
+import org.ieselcaminas.proyectofinal.R
+import org.ieselcaminas.proyectofinal.databinding.FragmentAccountBinding
 
 class Account : Fragment() {
     private var _binding: FragmentAccountBinding? = null

@@ -1,4 +1,4 @@
-package org.ieselcaminas.proyectofinall
+package org.ieselcaminas.proyectofinal
 
 import org.junit.Test
 

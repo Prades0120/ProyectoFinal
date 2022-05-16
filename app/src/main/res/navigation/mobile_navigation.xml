@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/navigation_home">
+    app:startDestination="@id/loginFragment">
     <fragment
         android:id="@+id/navigation_home"
-        android:name="org.ieselcaminas.proyectofinall.ui.Home"
+        android:name="org.ieselcaminas.proyectofinal.ui.Home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/navigation_diary"
-        android:name="org.ieselcaminas.proyectofinall.ui.Diary"
+        android:name="org.ieselcaminas.proyectofinal.ui.Diary"
         tools:layout="@layout/fragment_diary" />
 
     <fragment
         android:id="@+id/navigation_statics"
-        android:name="org.ieselcaminas.proyectofinall.ui.Statics"
+        android:name="org.ieselcaminas.proyectofinal.ui.Statics"
         tools:layout="@layout/fragment_statics" />
     <fragment
         android:id="@+id/navigation_account"
-        android:name="org.ieselcaminas.proyectofinall.ui.Account"
+        android:name="org.ieselcaminas.proyectofinal.ui.Account"
         tools:layout="@layout/fragment_account" >
         <action
             android:id="@+id/action_navigation_account_to_loginFragment"
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="org.ieselcaminas.proyectofinall.ui.ui.login.LoginFragment"
+        android:name="org.ieselcaminas.proyectofinal.ui.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
 </navigation>

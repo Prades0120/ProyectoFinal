@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "590681213265",
+    "project_id": "proyectofinal-10194265",
+    "storage_bucket": "proyectofinal-10194265.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:590681213265:android:27a5c76c18a186e81c2b70",
+        "android_client_info": {
+          "package_name": "org.ieselcaminas.proyectofinal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "590681213265-dtvr161tjevo93nfdiv1m8du9onrcm01.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA08qZnY15A4mI32a4AWMIGAF80hsbQzqw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "590681213265-dtvr161tjevo93nfdiv1m8du9onrcm01.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
