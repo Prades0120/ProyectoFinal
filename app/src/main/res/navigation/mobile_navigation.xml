@@ -20,5 +20,7 @@
     <fragment
         android:id="@+id/navigation_account"
         android:name="org.ieselcaminas.proyectofinal.ui.Account"
-        tools:layout="@layout/fragment_account" />
+        tools:layout="@layout/fragment_account" /><action android:id="@+id/action_global_navigation_account" app:destination="@id/navigation_account"
+    app:enterAnim="@anim/nav_default_enter_anim"
+    app:exitAnim="@anim/nav_default_exit_anim" />
 </navigation>

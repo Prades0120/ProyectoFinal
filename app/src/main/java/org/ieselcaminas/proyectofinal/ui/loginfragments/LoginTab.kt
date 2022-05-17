@@ -1,17 +1,20 @@
 package org.ieselcaminas.proyectofinal.ui.loginfragments
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import org.ieselcaminas.proyectofinal.AuthClass
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import org.ieselcaminas.proyectofinal.MainActivity
 import org.ieselcaminas.proyectofinal.R
-import org.ieselcaminas.proyectofinal.StartActivity
 import org.ieselcaminas.proyectofinal.databinding.FragmentLoginTabBinding
 
 private const val ARG_PARAM1 = "param1"
@@ -47,7 +50,9 @@ class LoginTab : Fragment() {
     @SuppressLint("CommitPrefEdits")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.buttonLogin.setOnClickListener {
+            val auth = Firebase.auth
             val mail = binding.editTextMailLogin.text.toString()
             val pass = binding.editTextPassLogin.text.toString()
 
@@ -57,28 +62,26 @@ class LoginTab : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                val login = AuthClass.logIn(mail, pass)
-                if (login == null) {
-                    Toast.makeText(
-                        context, resources.getText(R.string.login_error),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else if (login) {
-                    Toast.makeText(
-                        context, "Authentication success.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    val sharedPreferences = activity?.getSharedPreferences(getString(R.string.preferences_key),
-                        Context.MODE_PRIVATE)!!
-                    sharedPreferences.edit().putString(getString(R.string.storage_user_mail),mail)
-                    sharedPreferences.edit().putString(getString(R.string.storage_user_pass),pass)
-                    startActivity(Intent(this.context, StartActivity::class.java))
-                } else {
-                    Toast.makeText(
-                        context, "Authentication failed.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+                auth.signInWithEmailAndPassword(mail, pass)
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(ContentValues.TAG, "signInWithEmail:success")
+                            try {
+                                val sharedPreferences = activity?.getSharedPreferences(getString(R.string.preferences_key),
+                                    Context.MODE_PRIVATE)!!
+                                sharedPreferences.edit().putString(getString(R.string.storage_user_mail),mail).apply()
+                                sharedPreferences.edit().putString(getString(R.string.storage_user_pass),pass).apply()
+                                startActivity(Intent(context, MainActivity::class.java))
+                            } catch (e: Exception) {
+                                Toast.makeText(context,"Restart the app to relogin.", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(ContentValues.TAG, "logInWithEmail:failure", it.exception)
+                            Toast.makeText(context,"logInWithEmail:failure", Toast.LENGTH_SHORT).show()
+                        }
+                    }
             }
         }
     }
