@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import org.ieselcaminas.proyectofinal.MainActivity
 import org.ieselcaminas.proyectofinal.R
@@ -63,22 +64,29 @@ class LoginTab : Fragment() {
                 ).show()
             } else {
                 auth.signInWithEmailAndPassword(mail, pass)
-                    .addOnCompleteListener {
-                        if (it.isSuccessful) {
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(ContentValues.TAG, "signInWithEmail:success")
                             try {
                                 val sharedPreferences = activity?.getSharedPreferences(getString(R.string.preferences_key),
-                                    Context.MODE_PRIVATE)!!
-                                sharedPreferences.edit().putString(getString(R.string.storage_user_mail),mail).apply()
-                                sharedPreferences.edit().putString(getString(R.string.storage_user_pass),pass).apply()
-                                startActivity(Intent(context, MainActivity::class.java))
+                                    Context.MODE_PRIVATE)
+                                if (sharedPreferences!=null) {
+                                    sharedPreferences.edit().putString(getString(R.string.storage_user_mail),mail).apply()
+                                    sharedPreferences.edit().putString(getString(R.string.storage_user_pass),pass).apply()
+                                }
+                                val intent = Intent(context, MainActivity::class.java)
+                                intent.putExtra("name",Firebase.firestore.collection("users").document(mail).get()
+                                    .addOnSuccessListener { it.get("name").toString() }.toString())
+                                intent.putExtra("lastName",Firebase.firestore.collection("users").document(mail).get()
+                                    .addOnSuccessListener { it.get("lastName").toString() }.toString())
+                                startActivity(intent)
                             } catch (e: Exception) {
                                 Toast.makeText(context,"Restart the app to relogin.", Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(ContentValues.TAG, "logInWithEmail:failure", it.exception)
+                            Log.w(ContentValues.TAG, "logInWithEmail:failure", task.exception)
                             Toast.makeText(context,"logInWithEmail:failure", Toast.LENGTH_SHORT).show()
                         }
                     }

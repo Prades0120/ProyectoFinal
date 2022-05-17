@@ -67,10 +67,15 @@ class SigninTab : Fragment() {
                                         if (it.isSuccessful) {
                                             val sharedPreferences = activity?.getSharedPreferences(getString(
                                                 R.string.preferences_key),
-                                                Context.MODE_PRIVATE)!!
-                                            sharedPreferences.edit().putString(getString(R.string.storage_user_mail),mail).apply()
-                                            sharedPreferences.edit().putString(getString(R.string.storage_user_pass),pass).apply()
-                                            startActivity(Intent(context, MainActivity::class.java))
+                                                Context.MODE_PRIVATE)
+                                            if (sharedPreferences!=null) {
+                                                sharedPreferences.edit().putString(getString(R.string.storage_user_mail),mail).apply()
+                                                sharedPreferences.edit().putString(getString(R.string.storage_user_pass),pass).apply()
+                                            }
+                                            val intent = Intent(context, MainActivity::class.java)
+                                            intent.putExtra("name",name)
+                                            intent.putExtra("lastName",name)
+                                            startActivity(intent)
                                             activity?.finish()
                                         } else {
                                             Log.w(ContentValues.TAG, "logIn failure.", it.exception)

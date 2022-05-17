@@ -9,6 +9,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import org.ieselcaminas.proyectofinal.databinding.ActivityMainBinding
 import org.ieselcaminas.proyectofinal.ui.loginfragments.LoginTab
@@ -31,7 +32,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         if (auth.currentUser != null) {
-            startActivity(Intent(this,StartActivity::class.java))
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("name",Firebase.firestore.collection("users").document(auth.currentUser?.email.toString()).get()
+                .addOnSuccessListener { it.get("name").toString() }.toString())
+            intent.putExtra("lastName",Firebase.firestore.collection("users").document(auth.currentUser?.email.toString()).get()
+                .addOnSuccessListener { it.get("lastName").toString() }.toString())
+            startActivity(intent)
         } else {
             val sharedPreferences = getSharedPreferences(getString(R.string.preferences_key),
                 Context.MODE_PRIVATE)!!
@@ -40,9 +46,14 @@ class MainActivity : AppCompatActivity() {
 
             if (mail!= null && pass != null) {
                 auth.signInWithEmailAndPassword(mail,pass)
-                    .addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            startActivity(Intent(this,StartActivity::class.java))
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val intent = Intent(this, MainActivity::class.java)
+                            intent.putExtra("name",Firebase.firestore.collection("users").document(mail).get()
+                                .addOnSuccessListener { it.get("name").toString() }.toString())
+                            intent.putExtra("lastName",Firebase.firestore.collection("users").document(mail).get()
+                                .addOnSuccessListener { it.get("lastName").toString() }.toString())
+                            startActivity(intent)
                         } else {
                             viewPager = binding.viewPager2
                             tabLayout = binding.tabLayout

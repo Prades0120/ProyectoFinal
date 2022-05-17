@@ -7,12 +7,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.app
 import org.ieselcaminas.proyectofinal.MainActivity
@@ -20,8 +18,18 @@ import org.ieselcaminas.proyectofinal.R
 import org.ieselcaminas.proyectofinal.databinding.FragmentAccountBinding
 
 class Account : Fragment() {
+    private lateinit var name: String
+    private lateinit var lastName: String
     private var _binding: FragmentAccountBinding? = null
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            name = it.getString("name").toString()
+            lastName = it.getString("lastName").toString()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,23 +40,13 @@ class Account : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("SetTextI18n", "CommitPrefEdits")
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val db = Firebase.firestore
-        val auth = Firebase.auth
-        if (auth.currentUser != null) {
-            val mail = auth.currentUser!!.email.toString()
-            db.collection("users").document(mail).get()
-                .addOnSuccessListener {
-                    val name = it.get("name")
-                    val lastName = it.get("lastName")
-                    if (name != null && lastName!=null) {
-                        binding.textView.text = "$name $lastName"
-                        binding.textView2.text = mail
-                    }
-                }
-
+        val user = Firebase.auth.currentUser
+        if (user != null) {
+            binding.textView.text = name+lastName
+            binding.textView2.text = user.email.toString()
         }
 
         binding.logOutButton.setOnClickListener {
@@ -66,7 +64,23 @@ class Account : Fragment() {
         }
     }
 
-    override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
-        return super.onCreateAnimation(androidx.transition.R.anim.abc_grow_fade_in_from_bottom, enter, nextAnim)
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param name Parameter 1.
+         * @param lastName Parameter 2.
+         * @return A new instance of fragment Statics.
+         */
+
+        @JvmStatic
+        fun newInstance(name: String, lastName: String) =
+            Statics().apply {
+                arguments = Bundle().apply {
+                    putString("name", name)
+                    putString("lastName", lastName)
+                }
+            }
     }
 }
