@@ -25,6 +25,7 @@ class StartActivity : AppCompatActivity() {
 
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        navController.setGraph(R.navigation.mobile_navigation,intent.extras)
         navView.background = null
         navView.menu.getItem(2).isEnabled = false
         navView.setupWithNavController(navController)

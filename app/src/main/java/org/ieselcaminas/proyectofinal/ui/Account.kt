@@ -23,14 +23,6 @@ class Account : Fragment() {
     private var _binding: FragmentAccountBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            name = it.getString("name").toString()
-            lastName = it.getString("lastName").toString()
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,9 +35,11 @@ class Account : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        name = activity?.intent?.getStringExtra("name").toString()
+        lastName = activity?.intent?.getStringExtra("lastName").toString()
         val user = Firebase.auth.currentUser
         if (user != null) {
-            binding.textView.text = name+lastName
+            binding.textView.text = "$name $lastName"
             binding.textView2.text = user.email.toString()
         }
 
@@ -62,25 +56,5 @@ class Account : Fragment() {
                 Toast.makeText(context,"Restart the app to relogin.", Toast.LENGTH_SHORT).show()
             }
         }
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param name Parameter 1.
-         * @param lastName Parameter 2.
-         * @return A new instance of fragment Statics.
-         */
-
-        @JvmStatic
-        fun newInstance(name: String, lastName: String) =
-            Statics().apply {
-                arguments = Bundle().apply {
-                    putString("name", name)
-                    putString("lastName", lastName)
-                }
-            }
     }
 }
