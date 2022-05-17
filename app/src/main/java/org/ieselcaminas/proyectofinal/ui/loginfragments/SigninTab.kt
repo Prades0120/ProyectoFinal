@@ -1,14 +1,16 @@
 package org.ieselcaminas.proyectofinal.ui.loginfragments
 
-import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
+import org.ieselcaminas.proyectofinal.AuthClass
+import org.ieselcaminas.proyectofinal.StartActivity
 import org.ieselcaminas.proyectofinal.databinding.FragmentSigninTabBinding
 import org.ieselcaminas.proyectofinal.ui.Home
 
@@ -16,6 +18,7 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class SigninTab : Fragment() {
+    private var navigator: NavController? = null
     private var _binding: FragmentSigninTabBinding? = null
     private val binding get() = _binding!!
     private var _auth: FirebaseAuth? = null
@@ -44,32 +47,30 @@ class SigninTab : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonSignIn.setOnClickListener {
-            val password = binding.editTextPassSign.text.toString()
+            val pass = binding.editTextPassSign.text.toString()
             val mail = binding.editTextMailSign.text.toString()
             val name = binding.editTextName.text.toString()
             val lastName = binding.editTextLastName.text.toString()
 
-            val valid = if (name.isBlank() || lastName.isBlank() || mail.isBlank() || password.isBlank())
+            val valid = if (name.isBlank() || lastName.isBlank() || mail.isBlank() || pass.isBlank())
                 false
-            else !(password.length < 8 || password != binding.editTextPassRepeat.text.toString())
+            else !(pass.length < 8 || pass != binding.editTextPassRepeat.text.toString())
 
+            val login = AuthClass.signIn(mail,pass)
             if (valid) {
-                auth.createUserWithEmailAndPassword(mail,password)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success")
-                            Toast.makeText(context, "Authentication success.",
-                                Toast.LENGTH_SHORT).show()
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                            Toast.makeText(context, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show()
-                        }
-                    }
+                if (login==null) {
+                    Toast.makeText(context, "Authentication error.",
+                        Toast.LENGTH_SHORT).show()
+                } else if (login) {
+                    Toast.makeText(context, "Authentication success.",
+                        Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this.context, StartActivity::class.java))
+                } else {
+                    Toast.makeText(context, "Authentication failed.",
+                        Toast.LENGTH_SHORT).show()
+                }
             }
+
             binding.editTextName.text.clear()
             binding.editTextLastName.text.clear()
             binding.editTextMailSign.text.clear()
@@ -77,6 +78,11 @@ class SigninTab : Fragment() {
             binding.editTextPassRepeat.text.clear()
         }
     }
+
+    fun addNavigator(navigation: NavController) {
+        this.navigator = navigation
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of

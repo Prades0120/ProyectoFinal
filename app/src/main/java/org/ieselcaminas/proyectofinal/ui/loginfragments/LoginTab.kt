@@ -1,14 +1,19 @@
 package org.ieselcaminas.proyectofinal.ui.loginfragments
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import org.ieselcaminas.proyectofinal.AuthClass
 import org.ieselcaminas.proyectofinal.R
+import org.ieselcaminas.proyectofinal.StartActivity
+import org.ieselcaminas.proyectofinal.databinding.FragmentLoginTabBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
@@ -18,7 +23,8 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class LoginTab : Fragment() {
-    // TODO: Rename and change types of parameters
+    private var _binding: FragmentLoginTabBinding? = null
+    private val binding get() = _binding!!
     private var param1: String? = null
     private var param2: String? = null
 
@@ -33,12 +39,52 @@ class LoginTab : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login_tab, container, false)
+    ): View {
+        _binding = FragmentLoginTabBinding.inflate(layoutInflater)
+        return binding.root
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.buttonLogin.setOnClickListener {
+            val mail = binding.editTextMailLogin.text.toString()
+            val pass = binding.editTextPassLogin.text.toString()
+
+            if (mail.isBlank() || pass.isBlank()) {
+                Toast.makeText(
+                    context, resources.getText(R.string.login_error),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                val login = AuthClass.logIn(mail, pass)
+                if (login == null) {
+                    Toast.makeText(
+                        context, resources.getText(R.string.login_error),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else if (login) {
+                    Toast.makeText(
+                        context, "Authentication success.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    val sharedPreferences = activity?.getSharedPreferences(getString(R.string.preferences_key),
+                        Context.MODE_PRIVATE)!!
+                    sharedPreferences.edit().putString(getString(R.string.storage_user_mail),mail)
+                    sharedPreferences.edit().putString(getString(R.string.storage_user_pass),pass)
+                    startActivity(Intent(this.context, StartActivity::class.java))
+                } else {
+                    Toast.makeText(
+                        context, "Authentication failed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
     }
 
     companion object {
+
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
@@ -47,7 +93,7 @@ class LoginTab : Fragment() {
          * @param param2 Parameter 2.
          * @return A new instance of fragment LoginTab.
          */
-        // TODO: Rename and change types and number of parameters
+
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             LoginTab().apply {

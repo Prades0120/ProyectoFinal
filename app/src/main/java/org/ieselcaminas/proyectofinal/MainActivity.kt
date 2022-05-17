@@ -1,37 +1,51 @@
 package org.ieselcaminas.proyectofinal
 
-import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
-import androidx.navigation.findNavController
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.auth.FirebaseAuth
 import org.ieselcaminas.proyectofinal.databinding.ActivityMainBinding
+import org.ieselcaminas.proyectofinal.ui.loginfragments.LoginTab
+import org.ieselcaminas.proyectofinal.ui.loginfragments.SigninTab
 
 class MainActivity : AppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
+    private var _auth: FirebaseAuth? = null
+    private val auth get () = _auth!!
 
-    @SuppressLint("ResourceAsColor")
+    private lateinit var tabLayout : TabLayout
+    private lateinit var viewPager: ViewPager2
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navView: BottomNavigationView = binding.navView
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        navView.background = null
-        navView.menu.getItem(2).isEnabled = false
-        navView.setupWithNavController(navController)
+        _auth = FirebaseAuth.getInstance()
 
-        val bottomAppBar = binding.bottomAppBar
-        val fab = binding.fab
+        if (auth.currentUser != null) {
+            startActivity(Intent(this,StartActivity::class.java))
+        } else {
 
-        bottomAppBar.isVisible = false
-        bottomAppBar.isEnabled = false
-        fab.isVisible = false
-        fab.isEnabled = false
+            viewPager = binding.viewPager2
+            tabLayout = binding.tabLayout
+            val mAdapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
+            mAdapter.addFragment(LoginTab()) //0
+            mAdapter.addFragment(SigninTab()) //1
+
+            viewPager.adapter = mAdapter
+
+            TabLayoutMediator(tabLayout, viewPager) { tab, pos ->
+                when (pos) {
+                    0 -> tab.text = resources.getText(R.string.login)
+                    1 -> tab.text = resources.getText(R.string.action_sign_in_short)
+                }
+            }.attach()
+        }
     }
 }

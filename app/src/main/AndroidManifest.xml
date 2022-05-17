@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.ieselcaminas.proyectofinal" >
+    package="org.ieselcaminas.proyectofinal">
 
     <application
         android:allowBackup="true"
@@ -12,8 +12,13 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProyectoFinall"
-        tools:targetApi="31" >
+        tools:targetApi="31">
         <activity
+            android:noHistory="true"
+            android:name=".StartActivity"
+            android:exported="false" />
+        <activity
+            android:noHistory="true"
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

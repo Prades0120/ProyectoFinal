@@ -4,7 +4,6 @@
     <string name="title_diary">Diary</string>
     <string name="title_statics">Statics</string>
     <string name="title_account">Account</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="gest">Gest</string>
     <string name="user_mail">user@mail.com</string>
@@ -27,4 +26,9 @@
     <string name="last_name">Last Name</string>
     <string name="or">or</string>
     <string name="google_button">Google Button</string>
+    <string name="log_out">Log Out</string>
+    <string name="login_error" type="id">Mail or password incorrects.</string>
+    <string name="preferences_key">user</string>
+    <string name="storage_user_mail">user_mail</string>
+    <string name="storage_user_pass">user_pass</string>
 </resources>
