@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import org.ieselcaminas.proyectofinal.MainActivity
+import org.ieselcaminas.proyectofinal.LogInActivity
 import org.ieselcaminas.proyectofinal.R
 import org.ieselcaminas.proyectofinal.databinding.FragmentLoginTabBinding
 
@@ -75,7 +75,7 @@ class LoginTab : Fragment() {
                                     sharedPreferences.edit().putString(getString(R.string.storage_user_mail),mail).apply()
                                     sharedPreferences.edit().putString(getString(R.string.storage_user_pass),pass).apply()
                                 }
-                                val intent = Intent(context, MainActivity::class.java)
+                                val intent = Intent(context, LogInActivity::class.java)
                                 intent.putExtra("name",Firebase.firestore.collection("users").document(mail).get()
                                     .addOnSuccessListener { it.get("name").toString() }.toString())
                                 intent.putExtra("lastName",Firebase.firestore.collection("users").document(mail).get()

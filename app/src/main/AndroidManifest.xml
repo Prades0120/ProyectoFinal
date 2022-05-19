@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="org.ieselcaminas.proyectofinal">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -15,18 +16,23 @@
         android:theme="@style/Theme.ProyectoFinal"
         tools:targetApi="31">
         <activity
-            android:noHistory="true"
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:noHistory="true"
+            android:name=".LogInActivity"
+            android:exported="false"
+            android:noHistory="true">
+        </activity>
+        <activity
             android:name=".StartActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:noHistory="true" />
     </application>
 
 </manifest>

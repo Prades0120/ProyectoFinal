@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.app
-import org.ieselcaminas.proyectofinal.MainActivity
+import org.ieselcaminas.proyectofinal.LogInActivity
 import org.ieselcaminas.proyectofinal.R
 import org.ieselcaminas.proyectofinal.databinding.FragmentAccountBinding
 
@@ -51,7 +51,7 @@ class Account : Fragment() {
                 sharedPreferences.edit().putString(getString(R.string.storage_user_mail),null).apply()
                 sharedPreferences.edit().putString(getString(R.string.storage_user_pass),null).apply()
                 activity?.finish()
-                startActivity(Intent(context, MainActivity::class.java))
+                startActivity(Intent(context, LogInActivity::class.java))
             } catch (e: Exception) {
                 Toast.makeText(context,"Restart the app to relogin.", Toast.LENGTH_SHORT).show()
             }
