@@ -1,11 +1,13 @@
-package org.ieselcaminas.proyectofinal
+package org.ieselcaminas.proyectofinal.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import org.ieselcaminas.proyectofinal.R
 import org.ieselcaminas.proyectofinal.databinding.ActivityLoginBinding
+import org.ieselcaminas.proyectofinal.model.viewPager.ViewPagerAdapter
 import org.ieselcaminas.proyectofinal.ui.loginfragments.LoginTab
 import org.ieselcaminas.proyectofinal.ui.loginfragments.SigninTab
 
@@ -34,4 +36,5 @@ class LogInActivity : AppCompatActivity() {
             }
         }.attach()
     }
+
 }

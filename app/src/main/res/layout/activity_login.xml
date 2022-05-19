@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/primary_dark"
-    tools:context=".LogInActivity"
+    tools:context=".ui.LogInActivity"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <com.google.android.material.tabs.TabLayout

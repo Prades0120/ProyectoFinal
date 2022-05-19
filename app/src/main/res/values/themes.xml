@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.ProyectoFinal" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.ProyectoFinal" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/primary_dark</item>
@@ -14,7 +14,14 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="SplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar" >
+    <style name="SplashTheme" parent="Theme.ProyectoFinal" >
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
+    <style name="Theme.ProyectoFinal.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.ProyectoFinal.AppBarOverlay"
+        parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.ProyectoFinal.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

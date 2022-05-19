@@ -1,4 +1,4 @@
-package org.ieselcaminas.proyectofinal.ui
+package org.ieselcaminas.proyectofinal.ui.appFragments
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,13 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.app
-import org.ieselcaminas.proyectofinal.LogInActivity
 import org.ieselcaminas.proyectofinal.R
 import org.ieselcaminas.proyectofinal.databinding.FragmentAccountBinding
+import org.ieselcaminas.proyectofinal.ui.LogInActivity
 
 class Account : Fragment() {
     private lateinit var name: String
@@ -44,7 +42,7 @@ class Account : Fragment() {
         }
 
         binding.logOutButton.setOnClickListener {
-            FirebaseAuth.getInstance(Firebase.app).signOut()
+            Firebase.auth.signOut()
             try {
                 val sharedPreferences = activity?.getSharedPreferences(getString(R.string.preferences_key),
                     Context.MODE_PRIVATE)!!

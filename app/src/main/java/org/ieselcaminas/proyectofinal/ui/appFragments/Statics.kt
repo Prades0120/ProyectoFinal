@@ -1,10 +1,10 @@
-package org.ieselcaminas.proyectofinal.ui
+package org.ieselcaminas.proyectofinal.ui.appFragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import org.ieselcaminas.proyectofinal.R
 
 // TODO: Rename parameter arguments, choose names that match

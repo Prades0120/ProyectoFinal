@@ -1,10 +1,9 @@
 <resources>
-    <string name="app_name">ProyectoFinal</string>
+    <string name="app_name">All Right</string>
     <string name="title_home">Home</string>
     <string name="title_diary">Diary</string>
     <string name="title_statics">Statics</string>
     <string name="title_account">Account</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="gest">Gest</string>
     <string name="user_mail">user@mail.com</string>
     <string name="user_icon">user_icon</string>
@@ -31,4 +30,15 @@
     <string name="preferences_key">user</string>
     <string name="storage_user_mail">user_mail</string>
     <string name="storage_user_pass">user_pass</string>
+    <string name="title_activity_create_page">CreatePage</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="create_page_ask">How was your day ?</string>
+    <string name="background">Background</string>
 </resources>

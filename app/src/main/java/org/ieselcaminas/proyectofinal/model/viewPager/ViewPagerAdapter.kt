@@ -1,4 +1,4 @@
-package org.ieselcaminas.proyectofinal
+package org.ieselcaminas.proyectofinal.model.viewPager
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

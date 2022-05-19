@@ -1,4 +1,4 @@
-package org.ieselcaminas.proyectofinal
+package org.ieselcaminas.proyectofinal.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -8,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import org.ieselcaminas.proyectofinal.R
+import org.ieselcaminas.proyectofinal.model.recyclerView.Item
+import java.io.Serializable
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
@@ -24,6 +27,7 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+        Thread.sleep(100)
         checkUser()
     }
 
@@ -35,7 +39,7 @@ class SplashActivity : AppCompatActivity() {
                 if (it.isSuccessful) {
                     name = it.result.get("name") as String?
                     lastName = it.result.get("lastName") as String?
-                    startNewMenu()
+                    addDocs()
                 }else{
                     startNewLogin()
                 }
@@ -43,19 +47,18 @@ class SplashActivity : AppCompatActivity() {
         } else {
             val sharedPreferences = getSharedPreferences(
                 getString(R.string.preferences_key), Context.MODE_PRIVATE)
-            mail = sharedPreferences.getString(getString(R.string.storage_user_mail), null).orEmpty()
-            pass = sharedPreferences.getString(getString(R.string.storage_user_pass), null).orEmpty()
+            mail = sharedPreferences.getString(getString(R.string.storage_user_mail), null)
+            pass = sharedPreferences.getString(getString(R.string.storage_user_pass), null)
 
             if (mail!=null && pass!=null) {
-                val signin = auth.signInWithEmailAndPassword(mail!!, pass!!)
-                signin.addOnCompleteListener { task ->
+                auth.signInWithEmailAndPassword(mail!!, pass!!).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
 
                         val doc = db.collection("users").document(mail!!)
                         doc.get().addOnSuccessListener {
                             name = it.get("name") as String?
                             lastName = it.get("lastName") as String?
-                            startNewMenu()
+                            addDocs()
                         }
 
                     } else {
@@ -63,19 +66,47 @@ class SplashActivity : AppCompatActivity() {
                     }
                 }
                 user = auth.currentUser
+            } else {
+                startNewLogin()
             }
         }
-        startNewLogin()
     }
 
-    private fun startNewMenu() {
+    override fun onRestart() {
+        super.onRestart()
+        finish()
+    }
+
+    private fun startNewMainMenu(arrayList: ArrayList<Item>) {
         val intent = Intent(this, StartActivity::class.java)
         intent.putExtra("name",name)
         intent.putExtra("lastName",lastName)
+        intent.putExtra("array",arrayList as Serializable)
         startActivity(intent)
     }
 
     private fun startNewLogin() {
-        startActivity(Intent(this,LogInActivity::class.java))
+        startActivity(Intent(this, LogInActivity::class.java))
+    }
+
+    private fun addDocs(){
+        val array = ArrayList<Item>(0)
+
+        user?.email?.let { mail ->
+            db.collection("docs").document(mail).get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val data = task.result.data.orEmpty()
+                        if (data.isNotEmpty()) {
+                            val list = data as HashMap<String, String>
+                            for (i in list.keys) {
+                                array.add(Item(list[i].toString(),i))
+                            }
+                            array.sortByDescending { it.date.toLong() }
+                        }
+                        startNewMainMenu(array)
+                    }
+                }
+        }
     }
 }

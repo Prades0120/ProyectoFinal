@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/doc_recview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:backgroundTint="@color/white"
+    android:minWidth="264dp"
+    android:minHeight="58dp"
+    android:textAlignment="center"
+    android:textColor="@color/primary_dark"
+    tools:ignore="SpeakableTextPresentCheck" />

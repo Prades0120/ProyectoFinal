@@ -1,4 +1,4 @@
-package org.ieselcaminas.proyectofinal.ui
+package org.ieselcaminas.proyectofinal.ui.appFragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

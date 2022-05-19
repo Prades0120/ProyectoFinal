@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LogInActivity">
+    tools:context=".ui.LogInActivity">
 
     <fragment
         android:id="@+id/nav_host_fragment_activity_main"
@@ -14,7 +14,8 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="?attr/actionBarSize"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/mobile_navigation" />
+        app:navGraph="@navigation/mobile_navigation"
+        tools:ignore="FragmentTagUsage" />
 
 
     <com.google.android.material.bottomappbar.BottomAppBar

@@ -6,21 +6,20 @@
     app:startDestination="@id/navigation_home">
     <fragment
         android:id="@+id/navigation_home"
-        android:name="org.ieselcaminas.proyectofinal.ui.Home"
+        android:name="org.ieselcaminas.proyectofinal.ui.appFragments.Home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/navigation_diary"
-        android:name="org.ieselcaminas.proyectofinal.ui.Diary"
-        tools:layout="@layout/fragment_diary" />
+        android:name="org.ieselcaminas.proyectofinal.ui.appFragments.Diary"
+        tools:layout="@layout/fragment_diary" >
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_statics"
-        android:name="org.ieselcaminas.proyectofinal.ui.Statics"
+        android:name="org.ieselcaminas.proyectofinal.ui.appFragments.Statics"
         tools:layout="@layout/fragment_statics" />
     <fragment
         android:id="@+id/navigation_account"
-        android:name="org.ieselcaminas.proyectofinal.ui.Account"
-        tools:layout="@layout/fragment_account" /><action android:id="@+id/action_global_navigation_account" app:destination="@id/navigation_account"
-    app:enterAnim="@anim/nav_default_enter_anim"
-    app:exitAnim="@anim/nav_default_exit_anim" />
+        android:name="org.ieselcaminas.proyectofinal.ui.appFragments.Account"
+        tools:layout="@layout/fragment_account" />
 </navigation>

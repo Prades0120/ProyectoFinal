@@ -14,31 +14,18 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import org.ieselcaminas.proyectofinal.LogInActivity
 import org.ieselcaminas.proyectofinal.R
 import org.ieselcaminas.proyectofinal.databinding.FragmentLoginTabBinding
+import org.ieselcaminas.proyectofinal.model.recyclerView.Item
+import org.ieselcaminas.proyectofinal.ui.StartActivity
+import java.io.Serializable
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [LoginTab.newInstance] factory method to
- * create an instance of this fragment.
- */
 class LoginTab : Fragment() {
     private var _binding: FragmentLoginTabBinding? = null
     private val binding get() = _binding!!
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var name: String? = null
+    private var lastName: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +39,9 @@ class LoginTab : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         binding.buttonLogin.setOnClickListener {
+            val db = Firebase.firestore
             val auth = Firebase.auth
             val mail = binding.editTextMailLogin.text.toString()
             val pass = binding.editTextPassLogin.text.toString()
@@ -75,12 +64,18 @@ class LoginTab : Fragment() {
                                     sharedPreferences.edit().putString(getString(R.string.storage_user_mail),mail).apply()
                                     sharedPreferences.edit().putString(getString(R.string.storage_user_pass),pass).apply()
                                 }
-                                val intent = Intent(context, LogInActivity::class.java)
-                                intent.putExtra("name",Firebase.firestore.collection("users").document(mail).get()
-                                    .addOnSuccessListener { it.get("name").toString() }.toString())
-                                intent.putExtra("lastName",Firebase.firestore.collection("users").document(mail).get()
-                                    .addOnSuccessListener { it.get("lastName").toString() }.toString())
-                                startActivity(intent)
+                                db.collection("users").document(mail).get()
+                                    .addOnCompleteListener {
+                                        if (it.isSuccessful) {
+                                            name = it.result.get("name").toString()
+                                            lastName = it.result.get("lastName").toString()
+                                            addDocs()
+                                        } else {
+                                            name = "Gest"
+                                            lastName = ""
+                                            addDocs()
+                                        }
+                                    }
                             } catch (e: Exception) {
                                 Toast.makeText(context,"Restart the app to relogin.", Toast.LENGTH_SHORT).show()
                             }
@@ -94,24 +89,32 @@ class LoginTab : Fragment() {
         }
     }
 
-    companion object {
+    private fun addDocs(){
+        val array = ArrayList<Item>(0)
 
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment LoginTab.
-         */
-
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            LoginTab().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+        Firebase.auth.currentUser?.email?.let { mail ->
+            Firebase.firestore.collection("docs").document(mail).get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val data = task.result.data.orEmpty()
+                        if (data.isNotEmpty()) {
+                            val list = data as HashMap<String, String>
+                            for (i in list.keys) {
+                                array.add(Item(list[i].toString(),i))
+                            }
+                            array.sortByDescending { it.date.toLong() }
+                        }
+                        startNewMainMenu(array)
+                    }
                 }
-            }
+        }
+    }
+
+    private fun startNewMainMenu(arrayList: ArrayList<Item>) {
+        val intent = Intent(context, StartActivity::class.java)
+        intent.putExtra("name",name)
+        intent.putExtra("lastName",lastName)
+        intent.putExtra("array",arrayList as Serializable)
+        startActivity(intent)
     }
 }
