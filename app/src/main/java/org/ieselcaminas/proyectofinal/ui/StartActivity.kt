@@ -1,7 +1,9 @@
 package org.ieselcaminas.proyectofinal.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -25,15 +27,20 @@ class StartActivity : AppCompatActivity() {
         navView.menu.getItem(2).isEnabled = false
         navView.setupWithNavController(navController)
 
-        binding.fab.setOnClickListener {
-            startActivity(Intent(this,CreatePage::class.java))
-        }
-    }
+        val i = Intent(this,CreatePage::class.java)
+        i.putExtra("array",this.intent.getSerializableExtra("array"))
+        val getResult =
+            registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult()
+            ) {
+                if (it.resultCode == Activity.RESULT_OK) {
+                    val value = it.data?.getSerializableExtra("array")
+                    this.intent.putExtra("array",value)
+                }
+            }
 
-    private fun startCreatePage(text: String, date: String) {
-        val i = Intent(this, CreatePage::class.java)
-        i.putExtra("text",text)
-        i.putExtra("string", date)
-        startActivity(i)
+        binding.fab.setOnClickListener {
+            getResult.launch(i)
+        }
     }
 }

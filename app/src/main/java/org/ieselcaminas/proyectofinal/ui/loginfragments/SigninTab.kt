@@ -63,25 +63,27 @@ class SigninTab : Fragment() {
                                 "image" to null,
                                 "phone" to null,
                             )
-                            db.collection("users").document(mail).set(user)
                             try {
-                                auth.signInWithEmailAndPassword(mail,pass)
-                                    .addOnCompleteListener {
-                                        if (it.isSuccessful) {
-                                            val sharedPreferences = activity?.getSharedPreferences(getString(
+                            db.collection("users").document(mail).set(user).
+                                addOnSuccessListener {
+                                    auth.signInWithEmailAndPassword(mail,pass)
+                                        .addOnCompleteListener {
+                                            if (it.isSuccessful) {
+                                                val sharedPreferences = activity?.getSharedPreferences(getString(
                                                 R.string.preferences_key),
-                                                Context.MODE_PRIVATE)
-                                            if (sharedPreferences!=null) {
-                                                sharedPreferences.edit().putString(getString(R.string.storage_user_mail),mail).apply()
-                                                sharedPreferences.edit().putString(getString(R.string.storage_user_pass),pass).apply()
+                                                    Context.MODE_PRIVATE)
+                                                if (sharedPreferences!=null) {
+                                                    sharedPreferences.edit().putString(getString(R.string.storage_user_mail),mail).apply()
+                                                    sharedPreferences.edit().putString(getString(R.string.storage_user_pass),pass).apply()
+                                                }
+                                                this.name = name
+                                                this.lastName = lastName
+                                                addDocs()
+                                            } else {
+                                                Log.w(ContentValues.TAG, "logIn failure.", it.exception)
                                             }
-                                            this.name = name
-                                            this.lastName = lastName
-                                            addDocs()
-                                        } else {
-                                            Log.w(ContentValues.TAG, "logIn failure.", it.exception)
-                                        }
                                     }
+                                }
                             } catch (e: Exception) {
                                 Toast.makeText(context,"Restart the app to relogin.", Toast.LENGTH_SHORT).show()
                             }
