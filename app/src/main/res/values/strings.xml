@@ -41,4 +41,10 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="create_page_ask">How was your day ?</string>
     <string name="background">Background</string>
+    <string name="loading">Loading…</string>
+    <string name="languaje_tag">en</string>
+    <string name="happines">Happines</string>
+    <string name="neutral">Neutral</string>
+    <string name="angry">Angry</string>
+    <string name="sadness">Sadness</string>
 </resources>

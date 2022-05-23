@@ -1,9 +1,7 @@
 package org.ieselcaminas.proyectofinal.ui
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -22,25 +20,16 @@ class StartActivity : AppCompatActivity() {
 
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        navController.setGraph(R.navigation.mobile_navigation,intent.extras)
+        navController.setGraph(R.navigation.mobile_navigation)
         navView.background = null
         navView.menu.getItem(2).isEnabled = false
         navView.setupWithNavController(navController)
 
-        val i = Intent(this, CreatePage::class.java)
-        i.putExtra("array",intent.getSerializableExtra("array"))
-        val getResult =
-            registerForActivityResult(
-                ActivityResultContracts.StartActivityForResult()
-            ) {
-                if (it.resultCode == Activity.RESULT_OK) {
-                    val value = it.data?.getSerializableExtra("array")
-                    intent.putExtra("array",value)
-                }
-            }
+
 
         binding.fab.setOnClickListener {
-            getResult.launch(i)
+            val i = Intent(this, CreatePage::class.java)
+            startActivity(i)
         }
     }
 }

@@ -34,7 +34,7 @@
                 android:id="@+id/scrollView2"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="74dp"
+                android:layout_marginTop="54dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -58,8 +58,9 @@
                         android:hint="@string/create_page_ask"
                         android:importantForAutofill="no"
                         android:inputType="textMultiLine"
+                        android:minHeight="580dp"
                         android:textColorHint="#757575"
-                        android:textSize="24sp"
+                        android:textSize="30sp"
                         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,TextContrastCheck" />
                 </LinearLayout>
             </ScrollView>
@@ -86,12 +87,13 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabIgnore"
-        android:visibility="invisible"
-        android:clickable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:clickable="false"
+        android:contentDescription="@string/fab_transformation_sheet_behavior"
         android:focusable="true"
+        android:visibility="invisible"
         app:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/fabDelete"
         app:layout_constraintEnd_toStartOf="@+id/fabDelete"
@@ -101,12 +103,13 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabSave"
-        android:visibility="invisible"
-        android:clickable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:clickable="false"
+        android:contentDescription="@string/fab_transformation_sheet_behavior"
         android:focusable="true"
+        android:visibility="invisible"
         app:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/fabIgnore"
         app:layout_constraintEnd_toStartOf="@+id/fabIgnore"
@@ -116,12 +119,13 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabDelete"
-        android:visibility="invisible"
-        android:clickable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:clickable="false"
+        android:contentDescription="@string/fab_transformation_sheet_behavior"
         android:focusable="true"
+        android:visibility="invisible"
         app:backgroundTint="@android:color/holo_red_light"
         app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton"
         app:layout_constraintEnd_toStartOf="@+id/floatingActionButton"

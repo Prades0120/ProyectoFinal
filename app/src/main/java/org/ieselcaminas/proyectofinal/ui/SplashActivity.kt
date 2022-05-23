@@ -9,8 +9,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import org.ieselcaminas.proyectofinal.R
-import org.ieselcaminas.proyectofinal.model.recyclerView.Item
-import java.io.Serializable
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
@@ -44,7 +42,7 @@ class SplashActivity : AppCompatActivity() {
                 if (it.isSuccessful) {
                     name = it.result.get("name") as String?
                     lastName = it.result.get("lastName") as String?
-                    addDocs()
+                    startNewMainMenu()
                 }else{
                     startNewLogin()
                 }
@@ -63,7 +61,7 @@ class SplashActivity : AppCompatActivity() {
                         doc.get().addOnSuccessListener {
                             name = it.get("name") as String?
                             lastName = it.get("lastName") as String?
-                            addDocs()
+                            startNewMainMenu()
                         }
 
                     } else {
@@ -82,36 +80,14 @@ class SplashActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun startNewMainMenu(arrayList: ArrayList<Item>) {
+    private fun startNewMainMenu() {
         val intent = Intent(this, StartActivity::class.java)
         intent.putExtra("name",name)
         intent.putExtra("lastName",lastName)
-        intent.putExtra("array",arrayList as Serializable)
         startActivity(intent)
     }
 
     private fun startNewLogin() {
         startActivity(Intent(this, LogInActivity::class.java))
-    }
-
-    private fun addDocs(){
-        val array = ArrayList<Item>(0)
-
-        user?.email?.let { mail ->
-            db.collection("docs").document(mail).get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val data = task.result.data.orEmpty()
-                        if (data.isNotEmpty()) {
-                            val list = data as HashMap<String, String>
-                            for (i in list.keys) {
-                                array.add(Item(list[i].toString(),i))
-                            }
-                            array.sortByDescending { it.date.toLong() }
-                        }
-                        startNewMainMenu(array)
-                    }
-                }
-        }
     }
 }

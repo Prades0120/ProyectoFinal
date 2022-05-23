@@ -10,10 +10,10 @@ import org.ieselcaminas.proyectofinal.R
 import java.text.SimpleDateFormat
 import java.util.*
 
-class RecyclerViewAdapter(private val items: ArrayList<Item>): RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>()  {
+class RecyclerViewAdapter(private val items: ArrayList<Item>,val languajeTag: String): RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>()  {
     lateinit var onClick : (View) -> Unit
 
-    class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(val view: View,val languajeTag: String) : RecyclerView.ViewHolder(view) {
 
         private val button: Button = view.findViewById(R.id.doc_recview)
 
@@ -23,7 +23,7 @@ class RecyclerViewAdapter(private val items: ArrayList<Item>): RecyclerView.Adap
                 val cal = GregorianCalendar.getInstance()
                 cal.time = Date(item.date.toLong())
                 cal.add(Calendar.DAY_OF_MONTH,90)
-                button.text = SimpleDateFormat("EEEE,  dd MMMM, yyyy", Locale.UK).format(cal.time)
+                button.text = SimpleDateFormat("EEEE,  dd MMMM, yyyy", Locale.forLanguageTag(languajeTag)).format(cal.time)
                 button.setOnClickListener { onClick(itemView) }
             } else {
                 button.text = item.date
@@ -32,7 +32,7 @@ class RecyclerViewAdapter(private val items: ArrayList<Item>): RecyclerView.Adap
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_recview,parent,false))
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_recview,parent,false),languajeTag)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

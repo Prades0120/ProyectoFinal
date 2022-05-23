@@ -13,4 +13,8 @@
     <color name="secondary">#ff9800</color>
     <color name="secondary_light">#ffc947</color>
     <color name="secondary_dark">#c66900</color>
+    <color name="yellow">#FFFFD011</color>
+    <color name="red">#FFFF2222</color>
+    <color name="blue">#FF02DAEF</color>
+    <color name="grey">#FFAAAAAA</color>
 </resources>

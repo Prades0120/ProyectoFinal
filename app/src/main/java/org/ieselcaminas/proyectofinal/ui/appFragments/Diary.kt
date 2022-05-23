@@ -1,100 +1,92 @@
 package org.ieselcaminas.proyectofinal.ui.appFragments
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import org.eazegraph.lib.models.PieModel
+import org.ieselcaminas.proyectofinal.R
 import org.ieselcaminas.proyectofinal.databinding.FragmentDiaryBinding
 import org.ieselcaminas.proyectofinal.model.recyclerView.Item
 import org.ieselcaminas.proyectofinal.model.recyclerView.RecyclerViewAdapter
 import org.ieselcaminas.proyectofinal.ui.CreatePage
-import java.io.Serializable
+
 
 class Diary : Fragment() {
 
+    private val db = Firebase.firestore
+    private val user = Firebase.auth.currentUser!!
     private var _binding: FragmentDiaryBinding? = null
     private val binding get() = _binding!!
-
-    private val db = Firebase.firestore
-    private var _user: FirebaseUser? = null
-    private val user get() = _user!!
-    private var array: ArrayList<Item> = ArrayList(0)
-    private lateinit var getResult: ActivityResultLauncher<Intent>
-    private lateinit var intentFragment: Intent
+    private lateinit var array: ArrayList<Item>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _user = Firebase.auth.currentUser
         _binding = FragmentDiaryBinding.inflate(layoutInflater)
-        val intent = activity?.intent
-        if (intent!=null) {
-            intent.let {
-                array = it.getParcelableArrayListExtra<Item>("array") as ArrayList<Item>
-            }
-            intentFragment = Intent(context, CreatePage::class.java)
-            getResult =
-                registerForActivityResult(
-                    ActivityResultContracts.StartActivityForResult()
-                ) {
-                    if (it.resultCode == Activity.RESULT_OK) {
-                        val value = it.data?.getSerializableExtra("array")
-                        intent.putExtra("array",value)
-                    }
-                }
-        }
         return binding.root
     }
 
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recViewConstruction()
+        val mPieChart = binding.piechart
+
+        mPieChart.addPieSlice(PieModel("Happiness", 25F,ContextCompat.getColor(requireContext(),R.color.yellow)))
+        mPieChart.addPieSlice(PieModel("Neutral", 35F, ContextCompat.getColor(requireContext(),R.color.grey)))
+        mPieChart.addPieSlice(PieModel("Angry", 15F, ContextCompat.getColor(requireContext(),R.color.red)))
+        mPieChart.addPieSlice(PieModel("Sadness", 9F,ContextCompat.getColor(requireContext(),R.color.blue)))
+
+        mPieChart.startAnimation()
     }
 
     override fun onResume() {
-        if (activity?.intent!=null) {
-            requireActivity().intent.let {
-                array = it.getParcelableArrayListExtra<Item>("array") as ArrayList<Item>
+        val loading = activity?.let { LoadingDialog(it) }!!
+        loading.startLoading()
+        db.collection("docs").document(user.email!!).get()
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    val mutableList = it.result.data.orEmpty()
+                    val newArray = ArrayList<Item>(0)
+                    for (i in mutableList.keys) {
+                        newArray.add(Item(mutableList[i].toString(),i))
+                    }
+                    if (newArray.isEmpty())
+                        newArray.add(Item("","No Data"))
+                    array = newArray
+                    recViewConstruction()
+                    loading.dismissDialog()
+                } else {
+                    array = ArrayList(0)
+                    loading.dismissDialog()
+                }
             }
-        }
-        intentFragment.putExtra("array",array as Serializable)
-        recViewConstruction()
         super.onResume()
     }
 
     private fun recViewConstruction() {
         val recView = binding.recView
-
-        val item = Item("","No Data")
-        if (array.isEmpty()) {
-            array.add(item)
-        } else if (array.isNotEmpty()){
-            for (i in array) {
-                if (i.date == "No Data") {
-                    array.remove(i)
-                }
-            }
-        }
-
         recView.setHasFixedSize(true)
-        val adapter = RecyclerViewAdapter(array)
+        val adapter = RecyclerViewAdapter(array,getString(R.string.languaje_tag))
         adapter.onClick = {
-            intentFragment.putExtra("text",array[recView.getChildAdapterPosition(it)].text)
-            intentFragment.putExtra("date",array[recView.getChildAdapterPosition(it)].date)
-            getResult.launch(intentFragment)
+            val date = array[recView.getChildAdapterPosition(it)].date
+            val text = array[recView.getChildAdapterPosition(it)].text
+
+            if (date!="No Data") {
+                val newIntent = Intent(context, CreatePage::class.java)
+                newIntent.putExtra("text", text)
+                newIntent.putExtra("date", date)
+                startActivity(newIntent)
+            }
         }
         recView.adapter = adapter
         recView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)

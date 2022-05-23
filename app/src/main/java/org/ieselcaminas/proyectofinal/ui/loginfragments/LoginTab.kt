@@ -16,9 +16,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import org.ieselcaminas.proyectofinal.R
 import org.ieselcaminas.proyectofinal.databinding.FragmentLoginTabBinding
-import org.ieselcaminas.proyectofinal.model.recyclerView.Item
 import org.ieselcaminas.proyectofinal.ui.StartActivity
-import java.io.Serializable
 
 class LoginTab : Fragment() {
     private var _binding: FragmentLoginTabBinding? = null
@@ -69,11 +67,11 @@ class LoginTab : Fragment() {
                                         if (it.isSuccessful) {
                                             name = it.result.get("name").toString()
                                             lastName = it.result.get("lastName").toString()
-                                            addDocs()
+                                            startNewMainMenu()
                                         } else {
                                             name = "Gest"
                                             lastName = ""
-                                            addDocs()
+                                            startNewMainMenu()
                                         }
                                     }
                             } catch (e: Exception) {
@@ -89,32 +87,10 @@ class LoginTab : Fragment() {
         }
     }
 
-    private fun addDocs(){
-        val array = ArrayList<Item>(0)
-
-        Firebase.auth.currentUser?.email?.let { mail ->
-            Firebase.firestore.collection("docs").document(mail).get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val data = task.result.data.orEmpty()
-                        if (data.isNotEmpty()) {
-                            val list = data as HashMap<String, String>
-                            for (i in list.keys) {
-                                array.add(Item(list[i].toString(),i))
-                            }
-                            array.sortByDescending { it.date.toLong() }
-                        }
-                        startNewMainMenu(array)
-                    }
-                }
-        }
-    }
-
-    private fun startNewMainMenu(arrayList: ArrayList<Item>) {
+    private fun startNewMainMenu() {
         val intent = Intent(context, StartActivity::class.java)
         intent.putExtra("name",name)
         intent.putExtra("lastName",lastName)
-        intent.putExtra("array",arrayList as Serializable)
         startActivity(intent)
     }
 }

@@ -12,31 +12,155 @@
         android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="550dp"
+            android:id="@+id/cardViewGraph"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_margin="8dp"
+            android:elevation="10dp"
+            app:cardCornerRadius="18dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" >
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
 
-            <TextView
-                android:id="@+id/editTextTextPersonName"
+
+            <!--Linear layout to display pie chart -->
+            <!-- and details of pie chart-->
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:ems="10" />
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <!--Pie chart to display the data-->
+
+                <org.eazegraph.lib.charts.PieChart
+                    android:id="@+id/piechart"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_weight="1"
+                    android:padding="6dp"
+
+                    />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_vertical">
+
+                        <!--View to display the yellow color icon-->
+                        <View
+                            android:layout_width="15dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/yellow" />
+
+                        <!--Text view to display R -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="10dp"
+                            android:text="@string/happines"
+                            tools:ignore="RtlSymmetry" />
+
+                    </LinearLayout>
+
+                    <!--Linear layout to display Python-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="5dp">
+
+                        <!--View to display the green color icon-->
+                        <View
+                            android:layout_width="15dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/grey" />
+
+                        <!--Text view to display python text -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="10dp"
+                            android:text="@string/neutral"
+                            tools:ignore="RtlSymmetry" />
+
+                    </LinearLayout>
+
+                    <!--Linear layout to display C++-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="5dp">
+
+                        <!--View to display the red color icon-->
+                        <View
+                            android:layout_width="15dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/red" />
+
+                        <!--Text view to display C++ text -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="10dp"
+                            android:text="@string/angry"
+                            tools:ignore="RtlSymmetry" />
+
+                    </LinearLayout>
+
+                    <!--Linear layout to display Java-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="5dp">
+
+                        <!--View to display the blue color icon-->
+                        <View
+                            android:layout_width="15dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/blue" />
+
+                        <!--Text view to display Java text -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="10dp"
+                            android:text="@string/sadness"
+                            tools:ignore="RtlSymmetry" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
         </androidx.cardview.widget.CardView>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:padding="16dp"
             android:id="@+id/recView"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:padding="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView" />
+            app:layout_constraintTop_toBottomOf="@+id/cardViewGraph" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

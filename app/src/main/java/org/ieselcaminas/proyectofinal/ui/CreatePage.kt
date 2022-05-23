@@ -1,7 +1,6 @@
 package org.ieselcaminas.proyectofinal.ui
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -21,7 +20,6 @@ class CreatePage : AppCompatActivity() {
     private var _binding: ActivityCreatePageBinding? = null
     private val binding get() = _binding!!
 
-    private val db = Firebase.firestore
     private var _user: FirebaseUser? = null
     private val user get() = _user!!
     private var clicked = false
@@ -54,63 +52,45 @@ class CreatePage : AppCompatActivity() {
         }
 
         binding.fabIgnore.setOnClickListener {
-            setResult(Activity.RESULT_CANCELED)
             finish()
         }
 
         binding.fabDelete.setOnClickListener {
-            intent.let {
-                array = it.getParcelableArrayListExtra<Item>("array") as ArrayList<Item>
-            }
             if (date!=null) {
                 val updates = hashMapOf<String,Any>(
                     date to FieldValue.delete()
                 )
                 Firebase.firestore.collection("docs").document(user.email!!).update(updates).addOnCompleteListener {
-                    for (i in array) {
-                        if (i.date == date) {
-                            array.remove(i)
-                        }
+                    if (it.isSuccessful) {
+                        finish()
+                    } else {
+                        finish()
                     }
-                    setResult(Activity.RESULT_OK,intent.putExtra("array",array))
-                    finish()
                 }
             } else {
-                setResult(Activity.RESULT_CANCELED,intent.putExtra("array",array))
                 finish()
             }
         }
 
         binding.fabSave.setOnClickListener {
-            intent.let {
-                array = it.getParcelableArrayListExtra<Item>("array") as ArrayList<Item>
-            }
             val newDate = date ?: System.currentTimeMillis().toString()
             val textEdited = binding.editTextTextMultiLine.text.toString()
             val doc = hashMapOf<String,Any>(
                 newDate to textEdited
             )
             Firebase.firestore.collection("docs").document(user.email!!).update(doc).addOnCompleteListener {
-                var nuevo = true
-                for (i in array) {
-                    if (i.date == newDate) {
-                        nuevo = false
-                        array.remove(i)
-                        array.add(Item(textEdited, newDate))
-                    }
+                if (it.isSuccessful) {
+                    finish()
+                } else {
+                    finish()
                 }
-                if (nuevo) {
-                    array.add(Item(textEdited, newDate))
-                }
-                setResult(Activity.RESULT_OK,intent.putExtra("array",array))
-                finish()
             }
         }
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        this.finish()
+        finish()
     }
 
     private fun onAddButtonClicked() {
