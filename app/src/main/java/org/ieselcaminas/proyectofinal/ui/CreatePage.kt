@@ -25,6 +25,7 @@ class CreatePage : AppCompatActivity() {
     private var _user: FirebaseUser? = null
     private val user get() = _user!!
     private var clicked = false
+    private lateinit var array: ArrayList<Item>
 
     private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.rotate_open_anim) }
     private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.rotate_close_anim) }
@@ -58,7 +59,6 @@ class CreatePage : AppCompatActivity() {
         }
 
         binding.fabDelete.setOnClickListener {
-            var array: ArrayList<Item>
             intent.let {
                 array = it.getParcelableArrayListExtra<Item>("array") as ArrayList<Item>
             }
@@ -82,7 +82,6 @@ class CreatePage : AppCompatActivity() {
         }
 
         binding.fabSave.setOnClickListener {
-            var array: ArrayList<Item>
             intent.let {
                 array = it.getParcelableArrayListExtra<Item>("array") as ArrayList<Item>
             }

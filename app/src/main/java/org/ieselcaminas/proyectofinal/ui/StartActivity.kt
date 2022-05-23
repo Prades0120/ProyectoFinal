@@ -27,15 +27,15 @@ class StartActivity : AppCompatActivity() {
         navView.menu.getItem(2).isEnabled = false
         navView.setupWithNavController(navController)
 
-        val i = Intent(this,CreatePage::class.java)
-        i.putExtra("array",this.intent.getSerializableExtra("array"))
+        val i = Intent(this, CreatePage::class.java)
+        i.putExtra("array",intent.getSerializableExtra("array"))
         val getResult =
             registerForActivityResult(
                 ActivityResultContracts.StartActivityForResult()
             ) {
                 if (it.resultCode == Activity.RESULT_OK) {
                     val value = it.data?.getSerializableExtra("array")
-                    this.intent.putExtra("array",value)
+                    intent.putExtra("array",value)
                 }
             }
 

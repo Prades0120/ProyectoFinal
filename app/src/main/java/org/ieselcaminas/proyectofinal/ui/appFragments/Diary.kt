@@ -19,6 +19,7 @@ import org.ieselcaminas.proyectofinal.databinding.FragmentDiaryBinding
 import org.ieselcaminas.proyectofinal.model.recyclerView.Item
 import org.ieselcaminas.proyectofinal.model.recyclerView.RecyclerViewAdapter
 import org.ieselcaminas.proyectofinal.ui.CreatePage
+import java.io.Serializable
 
 class Diary : Fragment() {
 
@@ -30,7 +31,7 @@ class Diary : Fragment() {
     private val user get() = _user!!
     private var array: ArrayList<Item> = ArrayList(0)
     private lateinit var getResult: ActivityResultLauncher<Intent>
-    private lateinit var i: Intent
+    private lateinit var intentFragment: Intent
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,33 +39,38 @@ class Diary : Fragment() {
     ): View {
         _user = Firebase.auth.currentUser
         _binding = FragmentDiaryBinding.inflate(layoutInflater)
+        val intent = activity?.intent
+        if (intent!=null) {
+            intent.let {
+                array = it.getParcelableArrayListExtra<Item>("array") as ArrayList<Item>
+            }
+            intentFragment = Intent(context, CreatePage::class.java)
+            getResult =
+                registerForActivityResult(
+                    ActivityResultContracts.StartActivityForResult()
+                ) {
+                    if (it.resultCode == Activity.RESULT_OK) {
+                        val value = it.data?.getSerializableExtra("array")
+                        intent.putExtra("array",value)
+                    }
+                }
+        }
         return binding.root
     }
 
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val intent = activity?.intent
-        if (intent!=null) {
-            intent.let {
-                array = it.getParcelableArrayListExtra<Item>("array") as ArrayList<Item>
-            }
-            i = Intent(context, CreatePage::class.java)
-            i.putExtra("array", intent.getSerializableExtra("array"))
-            val getResult =
-                registerForActivityResult(
-                    ActivityResultContracts.StartActivityForResult()
-                ) {
-                    if (it.resultCode == Activity.RESULT_OK) {
-                        val value = it.data?.getSerializableExtra("array")
-                        intent.putExtra("array", value)
-                    }
-                }
-            this.getResult = getResult
-        }
+        recViewConstruction()
     }
 
     override fun onResume() {
+        if (activity?.intent!=null) {
+            requireActivity().intent.let {
+                array = it.getParcelableArrayListExtra<Item>("array") as ArrayList<Item>
+            }
+        }
+        intentFragment.putExtra("array",array as Serializable)
         recViewConstruction()
         super.onResume()
     }
@@ -75,7 +81,7 @@ class Diary : Fragment() {
         val item = Item("","No Data")
         if (array.isEmpty()) {
             array.add(item)
-        } else {
+        } else if (array.isNotEmpty()){
             for (i in array) {
                 if (i.date == "No Data") {
                     array.remove(i)
@@ -86,9 +92,9 @@ class Diary : Fragment() {
         recView.setHasFixedSize(true)
         val adapter = RecyclerViewAdapter(array)
         adapter.onClick = {
-            i.putExtra("text",array[recView.getChildAdapterPosition(it)].text)
-            i.putExtra("date",array[recView.getChildAdapterPosition(it)].date)
-            getResult.launch(i)
+            intentFragment.putExtra("text",array[recView.getChildAdapterPosition(it)].text)
+            intentFragment.putExtra("date",array[recView.getChildAdapterPosition(it)].date)
+            getResult.launch(intentFragment)
         }
         recView.adapter = adapter
         recView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
