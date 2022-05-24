@@ -1,7 +1,7 @@
 package org.ieselcaminas.proyectofinal.ui.appFragments
 
-import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +9,19 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.PercentFormatter
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import org.eazegraph.lib.models.PieModel
 import org.ieselcaminas.proyectofinal.R
 import org.ieselcaminas.proyectofinal.databinding.FragmentDiaryBinding
+import org.ieselcaminas.proyectofinal.model.jsonFormater.JsonParser
 import org.ieselcaminas.proyectofinal.model.recyclerView.Item
 import org.ieselcaminas.proyectofinal.model.recyclerView.RecyclerViewAdapter
 import org.ieselcaminas.proyectofinal.ui.CreatePage
@@ -27,6 +34,7 @@ class Diary : Fragment() {
     private var _binding: FragmentDiaryBinding? = null
     private val binding get() = _binding!!
     private lateinit var array: ArrayList<Item>
+    private lateinit var pieChart: PieChart
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,35 +44,38 @@ class Diary : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("SetTextI18n")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val mPieChart = binding.piechart
-
-        mPieChart.addPieSlice(PieModel("Happiness", 25F,ContextCompat.getColor(requireContext(),R.color.yellow)))
-        mPieChart.addPieSlice(PieModel("Neutral", 35F, ContextCompat.getColor(requireContext(),R.color.grey)))
-        mPieChart.addPieSlice(PieModel("Angry", 15F, ContextCompat.getColor(requireContext(),R.color.red)))
-        mPieChart.addPieSlice(PieModel("Sadness", 9F,ContextCompat.getColor(requireContext(),R.color.blue)))
-
-        mPieChart.startAnimation()
-    }
-
     override fun onResume() {
+        pieChart = binding.piechart
         val loading = activity?.let { LoadingDialog(it) }!!
         loading.startLoading()
         db.collection("docs").document(user.email!!).get()
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    val mutableList = it.result.data.orEmpty()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val mutableList = task.result.data.orEmpty()
                     val newArray = ArrayList<Item>(0)
                     for (i in mutableList.keys) {
                         newArray.add(Item(mutableList[i].toString(),i))
                     }
                     if (newArray.isEmpty())
                         newArray.add(Item("","No Data"))
+                    newArray.sortByDescending { it.date }
                     array = newArray
                     recViewConstruction()
-                    loading.dismissDialog()
+                    db.collection("sentiments").document(user.email!!).get()
+                        .addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                val jsonArray = ArrayList<String>()
+                                for (i in it.result.data!!.keys) {
+                                    jsonArray.add(it.result.data!![i].toString())
+                                }
+                                initPieChart()
+                                setDataToPieChart(JsonParser.parseEmotions(jsonArray))
+                                /*pieChartUpdate(JsonParser.parseEmotions(jsonArray))*/
+                                loading.dismissDialog()
+                            } else {
+                                loading.dismissDialog()
+                            }
+                        }
                 } else {
                     array = ArrayList(0)
                     loading.dismissDialog()
@@ -90,5 +101,60 @@ class Diary : Fragment() {
         }
         recView.adapter = adapter
         recView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+    }
+
+    private fun initPieChart() {
+        pieChart.isDrawHoleEnabled = false
+        pieChart.setExtraOffsets(20f, 0f, 20f, 20f)
+        pieChart.setUsePercentValues(true)
+        pieChart.description.text = ""
+        pieChart.setTouchEnabled(false)
+        pieChart.isRotationEnabled = false
+        pieChart.setDrawEntryLabels(false)
+        pieChart.legend.orientation = Legend.LegendOrientation.VERTICAL
+        pieChart.legend.isWordWrapEnabled = true
+    }
+
+    private fun setDataToPieChart(hashMap: HashMap<String,Float>) {
+        pieChart.setUsePercentValues(true)
+        val dataEntries = ArrayList<PieEntry>()
+        dataEntries.add(PieEntry(hashMap["happiness"]!!,"Happiness"))
+        dataEntries.add(PieEntry(hashMap["positive"]!!,"Positive"))
+        dataEntries.add(PieEntry(hashMap["anger"]!!,"Anger"))
+        dataEntries.add(PieEntry(hashMap["sadness"]!!,"Sadness"))
+        dataEntries.add(PieEntry(hashMap["negative"]!!,"Negative"))
+
+        val colors: ArrayList<Int> = ArrayList()
+        colors.add(ContextCompat.getColor(requireContext(),R.color.green))
+        colors.add(ContextCompat.getColor(requireContext(),R.color.yellow))
+        colors.add(ContextCompat.getColor(requireContext(),R.color.red))
+        colors.add(ContextCompat.getColor(requireContext(),R.color.blue))
+        colors.add(ContextCompat.getColor(requireContext(),R.color.blueviolet))
+
+        val dataSet = PieDataSet(dataEntries, "")
+        val data = PieData(dataSet)
+
+        // In Percentage
+        data.setValueFormatter(PercentFormatter())
+        dataSet.sliceSpace = 2f
+        dataSet.colors = colors
+        pieChart.data = data
+        data.setValueTextSize(15f)
+        pieChart.setExtraOffsets(5f, 10f, 5f, 5f)
+        pieChart.animateY(1400, Easing.EaseInOutQuad)
+
+        //create hole in center
+        pieChart.holeRadius = 58f
+        pieChart.transparentCircleRadius = 61f
+        pieChart.isDrawHoleEnabled = true
+        pieChart.setHoleColor(Color.WHITE)
+
+
+        //add text in center
+        pieChart.setDrawCenterText(true)
+        pieChart.centerText = "Sentiments"
+
+        pieChart.invalidate()
+
     }
 }

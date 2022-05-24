@@ -47,4 +47,6 @@
     <string name="neutral">Neutral</string>
     <string name="angry">Angry</string>
     <string name="sadness">Sadness</string>
+    <string name="negative">Negative</string>
+    <string name="positive">Positive</string>
 </resources>
