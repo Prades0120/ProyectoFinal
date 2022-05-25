@@ -1,4 +1,4 @@
-package org.ieselcaminas.proyectofinal.ui.appFragments
+package org.ieselcaminas.proyectofinal.ui
 
 import android.annotation.SuppressLint
 import android.app.Activity

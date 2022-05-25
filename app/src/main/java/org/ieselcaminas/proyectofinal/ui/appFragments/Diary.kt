@@ -25,6 +25,7 @@ import org.ieselcaminas.proyectofinal.model.jsonFormater.JsonParser
 import org.ieselcaminas.proyectofinal.model.recyclerView.Item
 import org.ieselcaminas.proyectofinal.model.recyclerView.RecyclerViewAdapter
 import org.ieselcaminas.proyectofinal.ui.CreatePage
+import org.ieselcaminas.proyectofinal.ui.LoadingDialog
 
 
 class Diary : Fragment() {
@@ -56,6 +57,7 @@ class Diary : Fragment() {
                     for (i in mutableList.keys) {
                         newArray.add(Item(mutableList[i].toString(),i))
                     }
+                    newArray.sortByDescending { it.date }
                     if (newArray.isEmpty())
                         newArray.add(Item("","No Data"))
                     newArray.sortByDescending { it.date }

@@ -1,5 +1,6 @@
 package org.ieselcaminas.proyectofinal.ui.appFragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +9,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
@@ -18,6 +18,7 @@ import com.google.firebase.ktx.Firebase
 import org.ieselcaminas.proyectofinal.R
 import org.ieselcaminas.proyectofinal.databinding.FragmentStaticsBinding
 import org.ieselcaminas.proyectofinal.model.jsonFormater.JsonParser
+import org.ieselcaminas.proyectofinal.ui.LoadingDialog
 
 class Statics : Fragment() {
 
@@ -48,7 +49,8 @@ class Statics : Fragment() {
                         jsonArray.add(it.result.data!![i].toString())
                     }
                     initBarChart()
-                    setDataToBarChart(JsonParser.parseEmotions(jsonArray))
+                    val emotionData = JsonParser.parseEmotions(jsonArray)
+                    setDataToBarChart(emotionData)
                     loading.dismissDialog()
                 } else {
                     loading.dismissDialog()
@@ -58,20 +60,38 @@ class Statics : Fragment() {
     }
 
     private fun initBarChart() {
-        barChart.setExtraOffsets(20f, 0f, 20f, 20f)
         barChart.description.text = ""
         barChart.setTouchEnabled(false)
-        barChart.legend.orientation = Legend.LegendOrientation.VERTICAL
-        barChart.legend.isWordWrapEnabled = true
+        barChart.legend.isEnabled = false
+        barChart.setFitBars(true)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setDataToBarChart(hashMap: HashMap<String,Float>) {
         val dataEntries = ArrayList<BarEntry>()
-        dataEntries.add(BarEntry(0f,hashMap["happiness"]!!))
-        dataEntries.add(BarEntry(20f,hashMap["positive"]!!))
-        dataEntries.add(BarEntry(40f,hashMap["anger"]!!))
-        dataEntries.add(BarEntry(60f,hashMap["sadness"]!!))
-        dataEntries.add(BarEntry(80f,hashMap["negative"]!!))
+
+        val happiness = hashMap["happiness"]!!
+        val positive = hashMap["positive"]!!
+        val anger = hashMap["anger"]!!
+        val sadness = hashMap["sadness"]!!
+        val negative = hashMap["negative"]!!
+
+        if (negative+sadness > happiness+positive && negative+sadness > anger) {
+            binding.resultStatics.setBackgroundResource(R.drawable.statics_bad)
+            binding.resultStatics.text = "You feel frequently sad or with negative emotions.\nWe recommend you to talk with someone to solve that.\nYou are fantastic. :)"
+        } else if (happiness+positive > anger) {
+            binding.resultStatics.setBackgroundResource(R.drawable.statics_good)
+            binding.resultStatics.text = "You commonly feel positive and happy. You are affronting with no issues the problems in your live.\nYou must be proud of you for been that awesome. ;)"
+        } else {
+            binding.resultStatics.setBackgroundResource(R.drawable.statics_anger)
+            binding.resultStatics.text = "You are angry with the world that is around you. You need to get some vacations and relax with your family and friends or meet someone\nGet a break."
+        }
+
+        dataEntries.add(BarEntry(0f,happiness))
+        dataEntries.add(BarEntry(20f,positive))
+        dataEntries.add(BarEntry(40f,anger))
+        dataEntries.add(BarEntry(60f,sadness))
+        dataEntries.add(BarEntry(80f,negative))
 
         val colors: ArrayList<Int> = ArrayList()
         colors.add(ContextCompat.getColor(requireContext(), R.color.green))
@@ -87,8 +107,9 @@ class Statics : Fragment() {
        // data.setValueFormatter(PercentFormatter())
         dataSet.colors = colors
         barChart.data = data
+        barChart.barData.barWidth = 6f
         data.setValueTextSize(12f)
-        barChart.setExtraOffsets(5f, 10f, 5f, 5f)
+        barChart.setExtraOffsets(0f,0f,0f,10f)
         barChart.animateY(1400, Easing.EaseInOutQuad)
 
 

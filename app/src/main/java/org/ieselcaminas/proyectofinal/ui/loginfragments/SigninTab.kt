@@ -16,6 +16,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import org.ieselcaminas.proyectofinal.R
 import org.ieselcaminas.proyectofinal.databinding.FragmentSigninTabBinding
+import org.ieselcaminas.proyectofinal.ui.LoadingDialog
 import org.ieselcaminas.proyectofinal.ui.StartActivity
 
 class SigninTab : Fragment() {
@@ -38,6 +39,8 @@ class SigninTab : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonSignIn.setOnClickListener {
+            val loading = activity?.let { LoadingDialog(it) }!!
+            loading.startLoading()
             val db = Firebase.firestore
             val auth = Firebase.auth
             val pass = binding.editTextPassSign.text.toString()
@@ -76,17 +79,21 @@ class SigninTab : Fragment() {
                                                 }
                                                 this.name = name
                                                 this.lastName = lastName
+                                                loading.dismissDialog()
                                                 startNewMainMenu()
                                             } else {
+                                                loading.dismissDialog()
                                                 Log.w(ContentValues.TAG, "logIn failure.", it.exception)
                                             }
                                     }
                                 }
                             } catch (e: Exception) {
+                                loading.dismissDialog()
                                 Toast.makeText(context,"Restart the app to relogin.", Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             // If sign in fails, display a message to the user.
+                            loading.dismissDialog()
                             Log.w(ContentValues.TAG, "signInWithEmail:failure", task.exception)
                         }
                     }

@@ -16,6 +16,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import org.ieselcaminas.proyectofinal.R
 import org.ieselcaminas.proyectofinal.databinding.FragmentLoginTabBinding
+import org.ieselcaminas.proyectofinal.ui.LoadingDialog
 import org.ieselcaminas.proyectofinal.ui.StartActivity
 
 class LoginTab : Fragment() {
@@ -39,6 +40,8 @@ class LoginTab : Fragment() {
 
 
         binding.buttonLogin.setOnClickListener {
+            val loading = activity?.let { LoadingDialog(it) }!!
+            loading.startLoading()
             val db = Firebase.firestore
             val auth = Firebase.auth
             val mail = binding.editTextMailLogin.text.toString()
@@ -49,6 +52,7 @@ class LoginTab : Fragment() {
                     context, resources.getText(R.string.login_error),
                     Toast.LENGTH_SHORT
                 ).show()
+                loading.dismissDialog()
             } else {
                 auth.signInWithEmailAndPassword(mail, pass)
                     .addOnCompleteListener { task ->
@@ -67,18 +71,22 @@ class LoginTab : Fragment() {
                                         if (it.isSuccessful) {
                                             name = it.result.get("name").toString()
                                             lastName = it.result.get("lastName").toString()
+                                            loading.dismissDialog()
                                             startNewMainMenu()
                                         } else {
                                             name = "Gest"
                                             lastName = ""
+                                            loading.dismissDialog()
                                             startNewMainMenu()
                                         }
                                     }
                             } catch (e: Exception) {
+                                loading.dismissDialog()
                                 Toast.makeText(context,"Restart the app to relogin.", Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             // If sign in fails, display a message to the user.
+                            loading.dismissDialog()
                             Log.w(ContentValues.TAG, "logInWithEmail:failure", task.exception)
                             Toast.makeText(context,"logInWithEmail:failure", Toast.LENGTH_SHORT).show()
                         }

@@ -18,7 +18,6 @@ import com.google.firebase.ktx.Firebase
 import org.ieselcaminas.proyectofinal.R
 import org.ieselcaminas.proyectofinal.databinding.ActivityCreatePageBinding
 import org.ieselcaminas.proyectofinal.model.restCaller.VolleySingleton
-import org.ieselcaminas.proyectofinal.ui.appFragments.LoadingDialog
 
 
 class CreatePage : AppCompatActivity() {
