@@ -50,4 +50,6 @@
     <string name="negative">Negative</string>
     <string name="positive">Positive</string>
     <string name="anger">Anger</string>
+    <string name="wellcome">- Wellcome -</string>
+    <string name="settings">Settings</string>
 </resources>

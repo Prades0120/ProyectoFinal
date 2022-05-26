@@ -78,7 +78,7 @@
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/white"
             android:elevation="10dp"
-            android:text="@string/security_save" />
+            android:text="@string/settings" />
 
         <Button
             android:id="@+id/logOutButton"

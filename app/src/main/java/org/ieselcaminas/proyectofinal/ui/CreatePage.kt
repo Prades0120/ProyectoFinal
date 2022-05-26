@@ -43,7 +43,6 @@ class CreatePage : AppCompatActivity() {
         setContentView(binding.root)
         binding.fabDelete.visibility = View.INVISIBLE
         binding.fabSave.visibility = View.INVISIBLE
-        binding.fabIgnore.visibility = View.INVISIBLE
 
         val text = intent.getStringExtra("text")
         val date = intent.getStringExtra("date")
@@ -56,7 +55,7 @@ class CreatePage : AppCompatActivity() {
             onAddButtonClicked()
         }
 
-        binding.fabIgnore.setOnClickListener {
+        binding.buttonIgnore.setOnClickListener {
             finish()
         }
 
@@ -182,11 +181,9 @@ class CreatePage : AppCompatActivity() {
     private fun setAnimation(clicked: Boolean) {
         if (!clicked) {
             binding.fabSave.visibility = View.VISIBLE
-            binding.fabIgnore.visibility = View.VISIBLE
             binding.fabDelete.visibility = View.VISIBLE
         } else {
             binding.fabSave.visibility = View.INVISIBLE
-            binding.fabIgnore.visibility = View.INVISIBLE
             binding.fabDelete.visibility = View.INVISIBLE
         }
     }
@@ -194,12 +191,10 @@ class CreatePage : AppCompatActivity() {
     private fun setVisibility(clicked: Boolean) {
         if (!clicked) {
             binding.fabSave.startAnimation(translateOpen)
-            binding.fabIgnore.startAnimation(translateOpen)
             binding.fabDelete.startAnimation(translateOpen)
             binding.floatingActionButton.startAnimation(rotateOpen)
         } else {
             binding.fabSave.startAnimation(translateClose)
-            binding.fabIgnore.startAnimation(translateClose)
             binding.fabDelete.startAnimation(translateClose)
             binding.floatingActionButton.startAnimation(rotateClose)
         }
@@ -208,11 +203,9 @@ class CreatePage : AppCompatActivity() {
     private fun setClickable(clicked: Boolean) {
         if (!clicked) {
             binding.fabSave.isClickable = true
-            binding.fabIgnore.isClickable = true
             binding.fabDelete.isClickable = true
         } else {
             binding.fabSave.isClickable = false
-            binding.fabIgnore.isClickable = false
             binding.fabDelete.isClickable = false
         }
     }

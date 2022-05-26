@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
     android:backgroundTint="@color/white"
+    android:fontFamily="@font/roboto"
     android:minWidth="264dp"
     android:minHeight="58dp"
     android:textAlignment="center"
