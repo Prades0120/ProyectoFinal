@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import org.ieselcaminas.proyectofinal.R
@@ -32,17 +33,20 @@ class RecyclerViewAdapterNews(private val items: ArrayList<New>): RecyclerView.A
         fun bindItem(item: New) {
             val executor = Executors.newSingleThreadExecutor()
             val handler = Handler(Looper.getMainLooper())
-            var imageSRC: Bitmap
+            var imageSRC: Bitmap?
+            val placeholder = getDrawable(view.context,R.drawable.no_image)
             executor.execute {
                 try {
                     val inImage: InputStream = URL(item.imageURL).openStream()
                     imageSRC = BitmapFactory.decodeStream(inImage)
                     handler.post {
-                        image.setImageBitmap(imageSRC)
+                        if (imageSRC == null){
+                            image.setImageDrawable(placeholder)
+                        } else {
+                            image.setImageBitmap(imageSRC)
+                        }
                     }
-                } catch (e: Exception) {
-                    image.setImageResource(R.drawable.image_news_placeholder)
-                }
+                } catch (e: Exception) {}
             }
             title.text = item.title
             description.text = item.description
