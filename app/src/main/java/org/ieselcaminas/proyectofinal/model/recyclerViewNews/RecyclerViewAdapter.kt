@@ -1,7 +1,11 @@
 package org.ieselcaminas.proyectofinal.model.recyclerViewNews
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +14,10 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import org.ieselcaminas.proyectofinal.R
+import java.io.InputStream
+import java.net.URL
+import java.util.concurrent.Executors
+
 
 class RecyclerViewAdapterNews(private val items: ArrayList<New>): RecyclerView.Adapter<RecyclerViewAdapterNews.ViewHolderNews>()  {
 
@@ -22,7 +30,20 @@ class RecyclerViewAdapterNews(private val items: ArrayList<New>): RecyclerView.A
         private val image: ImageView = view.findViewById(R.id.imageViewNew)
 
         fun bindItem(item: New) {
-            image.setImageResource(R.drawable.image_news_placeholder)
+            val executor = Executors.newSingleThreadExecutor()
+            val handler = Handler(Looper.getMainLooper())
+            var imageSRC: Bitmap
+            executor.execute {
+                try {
+                    val inImage: InputStream = URL(item.imageURL).openStream()
+                    imageSRC = BitmapFactory.decodeStream(inImage)
+                    handler.post {
+                        image.setImageBitmap(imageSRC)
+                    }
+                } catch (e: Exception) {
+                    image.setImageResource(R.drawable.image_news_placeholder)
+                }
+            }
             title.text = item.title
             description.text = item.description
             date.text = item.date.substring(0,item.date.length-7)

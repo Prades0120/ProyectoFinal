@@ -17,16 +17,16 @@ import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.IOException
 import java.io.InputStream
+import java.lang.Math.min
 import java.net.URL
 import java.util.concurrent.Executors
-import kotlin.math.min
 
 
 class Home: Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val feedRSS = "https://www.lifecoach-directory.org.uk/blog/feed"
+    private val feedRSS = "https://rssfeeds.webmd.com/rss/rss.aspx?RSSSource=RSS_PUBLIC"
     private lateinit var recView: RecyclerView
 
     override fun onCreateView(
@@ -52,6 +52,7 @@ class Home: Fragment() {
                 val links = ArrayList<String>(0)
                 val dates = ArrayList<String>(0)
                 val descriptions = ArrayList<String>(0)
+                val images = ArrayList<String>(0)
                 val url = URL(feedRSS)
                 val factory = XmlPullParserFactory.newInstance()
                 factory.isNamespaceAware = false
@@ -80,6 +81,10 @@ class Home: Fragment() {
                             if (insideItem) {
                                 descriptions.add(xpp.nextText())
                             }
+                        } else if (xpp.name.lowercase() == "content:encoded") {
+                            if (insideItem) {
+                                images.add(xpp.nextText().toString().split("\"")[1])
+                            }
                         }
                     } else if (eventType == XmlPullParser.END_TAG && xpp.name.lowercase() == "item") {
                         insideItem = false
@@ -87,9 +92,9 @@ class Home: Fragment() {
                     eventType = xpp.next()
                 }
 
-                val min = min(min(titles.size,dates.size), min(links.size,descriptions.size))
+                val min = min( min(images.size , min(titles.size,dates.size)), min(links.size,descriptions.size))
                 for (i in 0 until min) {
-                    news.add(New(titles[i], links[i], dates[i], descriptions[i]))
+                    news.add(New(titles[i], links[i], dates[i], descriptions[i], images[i]))
                 }
             }catch (e: Exception) {
                 loadingDialog.dismissDialog()
