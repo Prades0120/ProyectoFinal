@@ -1,4 +1,4 @@
-package org.ieselcaminas.proyectofinal.model.recyclerView
+package org.ieselcaminas.proyectofinal.model.recyclerViewNotes
 
 import android.os.Parcel
 import android.os.Parcelable

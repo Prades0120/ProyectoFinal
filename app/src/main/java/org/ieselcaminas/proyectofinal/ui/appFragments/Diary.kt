@@ -22,8 +22,8 @@ import com.google.firebase.ktx.Firebase
 import org.ieselcaminas.proyectofinal.R
 import org.ieselcaminas.proyectofinal.databinding.FragmentDiaryBinding
 import org.ieselcaminas.proyectofinal.model.jsonFormater.JsonParser
-import org.ieselcaminas.proyectofinal.model.recyclerView.Item
-import org.ieselcaminas.proyectofinal.model.recyclerView.RecyclerViewAdapter
+import org.ieselcaminas.proyectofinal.model.recyclerViewNotes.Item
+import org.ieselcaminas.proyectofinal.model.recyclerViewNotes.RecyclerViewAdapter
 import org.ieselcaminas.proyectofinal.ui.CreatePage
 import org.ieselcaminas.proyectofinal.ui.LoadingDialog
 

@@ -21,18 +21,23 @@
         <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/drawable/tab_background.xml" value="0.185" />
         <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/drawable/text_view_background.xml" value="0.132" />
         <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/drawable/user_card_view.xml" value="0.185" />
+        <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/drawable/wellcome_bakcground.xml" value="0.1925" />
         <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/layout/activity_splash.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/layout/activity_start.xml" value="0.2210144927536232" />
         <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/layout/fragment_account.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/layout/fragment_dashboard.xml" value="0.358695652173913" />
         <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/layout/fragment_diary.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/layout/fragment_home.xml" value="0.2" />
+        <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/layout/fragment_home_old.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/layout/fragment_login.xml" value="0.2" />
         <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/layout/fragment_login_tab.xml" value="0.2210144927536232" />
         <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/layout/fragment_notifications.xml" value="0.358695652173913" />
         <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/layout/fragment_placeholder.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/layout/fragment_signin_tab.xml" value="0.2210144927536232" />
         <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/layout/fragment_statics.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/layout/item_news.xml" value="0.365625" />
+        <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/layout/item_recview.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/alexp/AndroidStudioProjects/ProyectoFinall/app/src/main/res/menu/bottom_nav_menu.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/pls/AndroidStudioProjects/ProyectoFinall/app/src/main/res/drawable-v24/transparent_background.xml" value="0.223" />
         <entry key="..\:/Users/pls/AndroidStudioProjects/ProyectoFinall/app/src/main/res/drawable/ic_account_circle_24.xml" value="0.223" />
@@ -48,7 +53,6 @@
         <entry key="..\:/Users/pls/AndroidStudioProjects/ProyectoFinall/app/src/main/res/drawable/tab_background.xml" value="0.223" />
         <entry key="..\:/Users/pls/AndroidStudioProjects/ProyectoFinall/app/src/main/res/drawable/text_view_background.xml" value="0.223" />
         <entry key="..\:/Users/pls/AndroidStudioProjects/ProyectoFinall/app/src/main/res/drawable/user_card_view.xml" value="0.223" />
-        <entry key="..\:/Users/pls/AndroidStudioProjects/ProyectoFinall/app/src/main/res/drawable/wellcome_bakcground.xml" value="0.1355" />
         <entry key="..\:/Users/pls/AndroidStudioProjects/ProyectoFinall/app/src/main/res/layout-v23/activity_create_page.xml" value="0.2368659420289855" />
         <entry key="..\:/Users/pls/AndroidStudioProjects/ProyectoFinall/app/src/main/res/layout/activity_create_page.xml" value="0.23596014492753623" />
         <entry key="..\:/Users/pls/AndroidStudioProjects/ProyectoFinall/app/src/main/res/layout/activity_login.xml" value="0.2269021739130435" />
