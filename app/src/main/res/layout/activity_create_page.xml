@@ -94,7 +94,7 @@
         android:background="@android:color/transparent"
         android:contentDescription="@string/fab_transformation_sheet_behavior"
         android:focusable="true"
-        android:src="@drawable/ic_close_24"
+        android:src="@drawable/ic_arrow_back_24"
         app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"

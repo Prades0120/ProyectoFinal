@@ -44,13 +44,16 @@ class Statics : Fragment() {
         db.collection("sentiments").document(user.email!!).get()
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    val jsonArray = ArrayList<String>()
-                    for (i in it.result.data!!.keys) {
-                        jsonArray.add(it.result.data!![i].toString())
+                    val jsonArray = ArrayList<String>(0)
+                    val data = it.result.data
+                    if (data!=null && data.isNotEmpty()) {
+                        for (i in data.keys) {
+                            jsonArray.add(data[i].toString())
+                        }
+                        initBarChart()
+                        val emotionData = JsonParser.parseEmotions(jsonArray)
+                        setDataToBarChart(emotionData)
                     }
-                    initBarChart()
-                    val emotionData = JsonParser.parseEmotions(jsonArray)
-                    setDataToBarChart(emotionData)
                     loading.dismissDialog()
                 } else {
                     loading.dismissDialog()

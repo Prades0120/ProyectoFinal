@@ -51,15 +51,13 @@ class Diary : Fragment() {
         loading.startLoading()
         db.collection("docs").document(user.email!!).get()
             .addOnCompleteListener { task ->
+                val mutableList: Map<String,Any>
                 if (task.isSuccessful) {
-                    val mutableList = task.result.data.orEmpty()
+                    mutableList = task.result.data.orEmpty()
                     val newArray = ArrayList<Item>(0)
                     for (i in mutableList.keys) {
                         newArray.add(Item(mutableList[i].toString(),i))
                     }
-                    newArray.sortByDescending { it.date }
-                    if (newArray.isEmpty())
-                        newArray.add(Item("","No Data"))
                     newArray.sortByDescending { it.date }
                     array = newArray
                     recViewConstruction()
@@ -67,19 +65,19 @@ class Diary : Fragment() {
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
                                 val jsonArray = ArrayList<String>()
-                                for (i in it.result.data!!.keys) {
-                                    jsonArray.add(it.result.data!![i].toString())
-                                }
-                                initPieChart()
-                                setDataToPieChart(JsonParser.parseEmotions(jsonArray))
-                                /*pieChartUpdate(JsonParser.parseEmotions(jsonArray))*/
+                                val data = it.result.data
+                                if (data!=null && data.isNotEmpty())
+                                    for (i in data.keys) {
+                                        jsonArray.add(data[i].toString())
+                                        initPieChart()
+                                        setDataToPieChart(JsonParser.parseEmotions(jsonArray))
+                                    }
                                 loading.dismissDialog()
                             } else {
                                 loading.dismissDialog()
                             }
                         }
                 } else {
-                    array = ArrayList(0)
                     loading.dismissDialog()
                 }
             }
