@@ -25,13 +25,7 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        Thread.sleep(100)
         checkUser()
-        val sharedPreferences = getSharedPreferences(getString(R.string.preferences_key),
-            MODE_PRIVATE)
-        sharedPreferences.edit().putString("deletedFile",null).apply()
-        sharedPreferences.edit().putString("newText",null).apply()
-        sharedPreferences.edit().putString("newDate",null).apply()
     }
 
     private fun checkUser() {

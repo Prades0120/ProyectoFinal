@@ -97,6 +97,9 @@ class SigninTab : Fragment() {
                             Log.w(ContentValues.TAG, "signInWithEmail:failure", task.exception)
                         }
                     }
+            } else {
+                loading.dismissDialog()
+                Toast.makeText(context,"You need to fill in all the fields",Toast.LENGTH_SHORT).show()
             }
 
             binding.editTextName.text.clear()

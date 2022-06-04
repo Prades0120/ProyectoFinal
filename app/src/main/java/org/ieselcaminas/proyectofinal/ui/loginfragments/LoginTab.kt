@@ -1,6 +1,5 @@
 package org.ieselcaminas.proyectofinal.ui.loginfragments
 
-import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -34,7 +33,7 @@ class LoginTab : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("CommitPrefEdits")
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -84,10 +83,15 @@ class LoginTab : Fragment() {
                                 loading.dismissDialog()
                                 Toast.makeText(context,"Restart the app to relogin.", Toast.LENGTH_SHORT).show()
                             }
-                        } else {
+                        } else if (task.isComplete) {
                             // If sign in fails, display a message to the user.
+                            Toast.makeText(
+                                context, resources.getText(R.string.login_error),
+                                Toast.LENGTH_SHORT
+                            ).show()
                             loading.dismissDialog()
-                            Log.w(ContentValues.TAG, "logInWithEmail:failure", task.exception)
+                        } else {
+                            loading.dismissDialog()
                             Toast.makeText(context,"logInWithEmail:failure", Toast.LENGTH_SHORT).show()
                         }
                     }
